@@ -1,8 +1,10 @@
+import type { ChatSender, MoodType } from "../../types/chat";
+
 export interface IMessage{
     message:string;
 }
-export interface IGeminiMessage extends IMessage{ 
-    emotion: "smile" | "happy" | "sad" | "angry" | "friendly"
+export interface IGeminiMessage extends IChatMessage{ 
+    emotion: MoodType
 }
 export interface IGeminiRequest{
     contents : IGeminiContent[]
@@ -22,4 +24,9 @@ export interface IGeminiResponse{
 }
 export interface IGeminiCandidat{
     content: IGeminiContent
+}
+export interface IChatMessage {
+  id: string;
+  sender: ChatSender;
+  text: string;
 }

@@ -1,16 +1,21 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import { ChatInput } from '../components/chat/ChatInput';
 import { ChatMessageList } from '../components/chat/ChatMessageList';
 import { Header } from '../components/layout/Header';
 import { MoodPetCard } from '../components/pet/MoodPetCard';
-import { initialMessages } from '../data/initialMessages';
-import type { ChatMessage } from '../types/chat';
-import { detectMood } from '../utils/detectMood';
-import { defaultMood, moodImageMap, moodReplies } from '../utils/moodConfig';
+import { defaultMood, moodImageMap } from '../utils/moodConfig';
+import type { IChatMessage } from '../interfaces/general/general';
+import { useAppDispatch, useAppSelector } from '../redux/hook';
+import { sendMessageAsync } from '../redux/actions/geminiActions';
+import { GeminiRequestFactory } from '../heplers/geminiRequestFactory';
+import { setUserMessage } from '../redux/slices/geminiSlice';
 
 export function SentioPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+
+  const geminiReducer = useAppSelector(s => s.geminiReducer)
+  //const [messages, setMessages] = useState<IChatMessage[]>(initialMessages);
+  const [messages, setMessages] = useState<IChatMessage[]>(geminiReducer.messages);
   const [currentMood, setCurrentMood] = useState(defaultMood);
   const [inputValue, setInputValue] = useState('');
 
@@ -22,29 +27,33 @@ export function SentioPage() {
       return;
     }
 
-    const userMessage: ChatMessage = {
-      id: Date.now(),
+    const userMessage: IChatMessage = {
+      id: crypto.randomUUID(),
       sender: 'user',
       text,
     };
 
-    const mood = detectMood(text);
-
+    dispatch(setUserMessage(userMessage));
     setMessages((prev) => [...prev, userMessage]);
-    setCurrentMood(mood);
+    sendTestMessage(text);
     setInputValue('');
-
-    window.setTimeout(() => {
-      const sentioReply: ChatMessage = {
-        id: Date.now() + 1,
-        sender: 'sentio',
-        text: moodReplies[mood],
-      };
-
-      setMessages((prev) => [...prev, sentioReply]);
-    }, 300);
   };
 
+  const dispatch = useAppDispatch();
+
+  const sendTestMessage = async (str : string) => {
+
+    await dispatch(sendMessageAsync(GeminiRequestFactory.CreateRequest(str)))
+  }
+  useEffect(()=>{
+    sendTestMessage("Imagine that you are Sentio chatbot friend; I will respond to subsequent requests accordingly. Please send your response in JSON format{ message: string emotion: “smile” | “happy” | “sad” | ‘angry’ | “friendly”}");
+  },[])
+  useEffect(()=>{
+    setMessages(geminiReducer.messages);
+  },[geminiReducer.messages])
+  useEffect(()=>{
+    setCurrentMood(geminiReducer.currentMood);
+  },[geminiReducer.currentMood])
   return (
     <Box sx={{ minHeight: '100vh', background: 'linear-gradient(180deg, #fcfffe 0%, #f4f8ff 100%)' }}>
       <Header />
@@ -101,7 +110,7 @@ export function SentioPage() {
                 fontFamily: '"Nunito Sans", "Manrope", "Trebuchet MS", sans-serif',
               }}
             >
-              Hi, I am Sentio! How was your day?
+              Hi, I am Sentio!
             </Typography>
 
             <ChatMessageList messages={messages} />

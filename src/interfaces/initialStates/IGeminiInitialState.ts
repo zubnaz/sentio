@@ -1,6 +1,8 @@
-import type { IGeminiMessage, IMessage } from "../general/general";
+import type { MoodType } from "../../types/chat";
+import type { IChatMessage} from "../general/general";
 
 export interface IGeminiInitialState{
-    geminiMessages: IGeminiMessage[];
-    userMessages: IMessage[];
+    messages: IChatMessage[];
+    currentMood: MoodType,
+    
 }

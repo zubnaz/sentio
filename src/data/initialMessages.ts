@@ -1,8 +1,8 @@
-import type { ChatMessage } from '../types/chat';
+import type { IChatMessage } from '../interfaces/general/general';
 
-export const initialMessages: ChatMessage[] = [
+export const initialMessages: IChatMessage[] = [
   {
-    id: 1,
+    id: crypto.randomUUID(),
     sender: 'sentio',
     text: 'Hi! I am glad to see you. Tell me how you are today?',
   },

@@ -19,17 +19,6 @@ export function MoodPetCard({ imageSrc, moodLabel }: MoodPetCardProps) {
         boxShadow: '0 18px 45px rgba(25, 49, 76, 0.12)',
       }}
     >
-      <Typography
-        variant="subtitle1"
-        sx={{
-          mb: 1.5,
-          color: '#375a75',
-          fontWeight: 700,
-          fontFamily: '"Nunito Sans", "Manrope", sans-serif',
-        }}
-      >
-        Your mood today
-      </Typography>
 
       <Fade in key={moodLabel} timeout={420}>
         <Box

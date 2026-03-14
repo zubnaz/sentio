@@ -1,8 +1,9 @@
 import { Box, Typography } from '@mui/material';
-import type { ChatMessage } from '../../types/chat';
+import type { IChatMessage } from '../../interfaces/general/general';
+
 
 interface ChatMessageBubbleProps {
-  message: ChatMessage;
+  message: IChatMessage;
 }
 
 export function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
