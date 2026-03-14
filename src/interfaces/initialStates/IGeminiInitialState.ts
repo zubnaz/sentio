@@ -3,6 +3,5 @@ import type { IChatMessage} from "../general/general";
 
 export interface IGeminiInitialState{
     messages: IChatMessage[];
-    currentMood: MoodType,
-    
+    currentMood: MoodType
 }

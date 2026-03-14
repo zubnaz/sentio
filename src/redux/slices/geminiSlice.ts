@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction  } from "@reduxjs/toolkit";
+import { createSlice, current, type PayloadAction  } from "@reduxjs/toolkit";
 import type { IGeminiInitialState } from "../../interfaces/initialStates/IGeminiInitialState";
 import { sendMessageAsync } from "../actions/geminiActions";
 import type { IChatMessage, IGeminiMessage } from "../../interfaces/general/general";
@@ -17,15 +17,22 @@ const geminiSlice = createSlice({
         }
     },
     extraReducers:(builder)=>{
-        builder.addCase(sendMessageAsync.fulfilled, (state, action:PayloadAction<IGeminiMessage>) => {
+        builder.addCase(sendMessageAsync.pending, (state) => {
+            state.currentMood = "thinks";
+            state.messages = [...state.messages,{
+                id: crypto.randomUUID(),
+                text: "...",
+                sender: "sentio"
+            }]
+        })
+        .addCase(sendMessageAsync.fulfilled, (state, action:PayloadAction<IGeminiMessage>) => {
+            state.messages.splice(state.messages.length-1, state.messages.length);
             state.currentMood = action.payload.emotion;
             state.messages = [...state.messages,{
                 id: crypto.randomUUID(),
                 text: action.payload.text,
                 sender: action.payload.sender
             }];
-            console.log("messages")
-            console.log(state.messages)
         })
         .addCase(sendMessageAsync.rejected, (state, action)=>{
             console.log(action.payload ?? action.error);

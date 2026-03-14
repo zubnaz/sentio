@@ -6,9 +6,11 @@ const moodKeywords: Record<MoodType, string[]> = {
   angry: ['angry', 'mad', 'frustrated', 'annoyed', 'злий', 'бісить'],
   smile: ['good', 'nice', 'pleased', 'класно', 'приємно'],
   friendly: ['calm', 'normal', 'ok', 'добре', 'нормально'],
+  neutral: ['neutral', 'ordinary', 'usual', 'standard', 'звичайно', 'нормально', 'байдуже'],
+  thinks: ['thinking', 'considering', 'wondering', 'analyzing', 'думати', 'розмірковувати', 'цікавлюсь']
 };
 
-const moodPriority: MoodType[] = ['happy', 'sad', 'angry', 'smile', 'friendly'];
+const moodPriority: MoodType[] = ['happy', 'sad', 'angry', 'smile', 'friendly','neutral', 'thinks'];
 
 export function detectMood(message: string): MoodType {
   const normalizedMessage = message

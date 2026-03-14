@@ -14,7 +14,6 @@ import { setUserMessage } from '../redux/slices/geminiSlice';
 export function SentioPage() {
 
   const geminiReducer = useAppSelector(s => s.geminiReducer)
-  //const [messages, setMessages] = useState<IChatMessage[]>(initialMessages);
   const [messages, setMessages] = useState<IChatMessage[]>(geminiReducer.messages);
   const [currentMood, setCurrentMood] = useState(defaultMood);
   const [inputValue, setInputValue] = useState('');
@@ -34,7 +33,12 @@ export function SentioPage() {
     };
 
     dispatch(setUserMessage(userMessage));
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage,{
+      id: crypto.randomUUID(),
+      sender: 'sentio',
+      text: "..."
+    }]);
+
     sendTestMessage(text);
     setInputValue('');
   };

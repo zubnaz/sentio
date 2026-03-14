@@ -15,7 +15,7 @@ export const sendMessageAsync = createAsyncThunk<IGeminiMessage, IGeminiRequest,
         return JSON.parse(jsonResponse) as IGeminiMessage;
 
         } catch (err : any) {
-            let error : AxiosError<IGeminiError> = err;
+            const error : AxiosError<IGeminiError> = err;
                 
                 if(!error.response)
                      throw err;
