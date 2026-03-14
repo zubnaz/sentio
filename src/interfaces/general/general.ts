@@ -1,5 +1,5 @@
 export interface IMessage{
-    text:string;
+    message:string;
 }
 export interface IGeminiMessage extends IMessage{ 
     emotion: "smile" | "happy" | "sad" | "angry" | "friendly"
@@ -12,10 +12,6 @@ export interface IGeminiContent{
 }
 export interface IGeminiPart{
     text: string
-}
-export interface IGeminiResponseWithEmotion{
-    text: string
-    emotion: string
 }
 export interface IGeminiError{
     code: number,

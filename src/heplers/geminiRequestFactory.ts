@@ -1,4 +1,5 @@
 import type { IGeminiRequest } from "../interfaces/general/general";
+import { GeminiPromptFactory } from "./geminiPromptFactory";
 
 export class GeminiRequestFactory{
     static CreateRequest(text:string) : IGeminiRequest {
@@ -7,7 +8,7 @@ export class GeminiRequestFactory{
                 {
                     parts:[
                         {
-                            text: text
+                            text: GeminiPromptFactory.CreatePrompt(text)
                         }
                     ]
                 }

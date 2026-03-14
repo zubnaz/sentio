@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { IGeminiError, IGeminiRequest, IGeminiResponse } from "../../interfaces/general/general";
+import type { IGeminiError, IGeminiMessage, IGeminiRequest, IGeminiResponse } from "../../interfaces/general/general";
 import axios, { AxiosError } from "axios";
 
-export const sendMessageAsync = createAsyncThunk<string, IGeminiRequest, {rejectValue: IGeminiError}>(
+export const sendMessageAsync = createAsyncThunk<IGeminiMessage, IGeminiRequest, {rejectValue: IGeminiError}>(
     "gemini/send-message",
     async(request : IGeminiRequest, {rejectWithValue}) =>{
         try {
@@ -11,10 +11,8 @@ export const sendMessageAsync = createAsyncThunk<string, IGeminiRequest, {reject
                        "x-goog-api-key": import.meta.env.VITE_GEMINI_KEY
             }
         });
-        console.log("response from thunk");
-        console.log(response.data)
-        return (response.data as IGeminiResponse).candidates[0].content.parts[0].text;
-        
+        const jsonResponse = (response.data as IGeminiResponse).candidates[0].content.parts[0].text.replace('```','').replace('```','').replace('json','').trim();
+        return JSON.parse(jsonResponse) as IGeminiMessage;
 
         } catch (err : any) {
             let error : AxiosError<IGeminiError> = err;
